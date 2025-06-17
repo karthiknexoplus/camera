@@ -31,16 +31,52 @@ def show_recent_vehicles():
         print(f"❌ Connection failed: {e}")
         return
     
-    # Search today's vehicles
-    print("\n🔍 Searching Today's Vehicles...")
-    today = datetime.datetime.now()
-    start_time = today.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-    end_time = today.replace(hour=23, minute=59, second=59).strftime("%Y-%m-%d %H:%M:%S")
+    # Ask user for time range
+    print("\n⏰ Choose time range:")
+    print("1. Last 1 hour")
+    print("2. Last 6 hours")
+    print("3. Today (full day)")
+    print("4. Custom time range")
+    
+    choice = input("\nEnter your choice (1-4): ").strip()
+    
+    now = datetime.datetime.now()
+    
+    if choice == "1":
+        # Last 1 hour
+        start_time = (now - datetime.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
+        end_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        time_description = "last hour"
+    elif choice == "2":
+        # Last 6 hours
+        start_time = (now - datetime.timedelta(hours=6)).strftime("%Y-%m-%d %H:%M:%S")
+        end_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        time_description = "last 6 hours"
+    elif choice == "3":
+        # Today
+        start_time = now.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
+        end_time = now.replace(hour=23, minute=59, second=59).strftime("%Y-%m-%d %H:%M:%S")
+        time_description = "today"
+    elif choice == "4":
+        # Custom time range
+        print("\nEnter custom time range:")
+        start_time = input("Start time (YYYY-MM-DD HH:MM:SS): ").strip()
+        end_time = input("End time (YYYY-MM-DD HH:MM:SS): ").strip()
+        time_description = "custom range"
+    else:
+        print("Invalid choice. Using last hour.")
+        start_time = (now - datetime.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
+        end_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        time_description = "last hour"
+    
+    # Search vehicles
+    print(f"\n🔍 Searching Vehicles from {time_description}...")
+    print(f"⏰ Time Range: {start_time} to {end_time}")
     
     success, result = vehicle_system.search_vehicles_by_time(start_time, end_time)
     if success:
         data = result
-        print(f"✅ Found {data['count']} vehicles today")
+        print(f"✅ Found {data['count']} vehicles in {time_description}")
         
         if data['count'] > 0:
             # Sort vehicles by snap time (most recent first)
@@ -59,9 +95,14 @@ def show_recent_vehicles():
                 timestamp_seconds = snap_time / 1000000
                 readable_time = datetime.datetime.fromtimestamp(timestamp_seconds)
                 
+                # Calculate how long ago this vehicle was detected
+                time_diff = now - readable_time
+                minutes_ago = int(time_diff.total_seconds() / 60)
+                
                 print(f"{i:2d}. Vehicle ID: {vehicle['vehicleID']}")
                 print(f"    Raw Snap Time: {snap_time}")
                 print(f"    Readable Time: {readable_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                print(f"    Time Ago: {minutes_ago} minutes ago")
                 
                 # Get detailed info for each vehicle
                 success, details = vehicle_system.get_vehicle_details(
@@ -89,10 +130,10 @@ def show_recent_vehicles():
             print(f"\n📊 Summary:")
             print(f"  Most Recent: Vehicle ID {sorted_vehicles[0]['vehicleID']}")
             print(f"  Oldest: Vehicle ID {sorted_vehicles[-1]['vehicleID']}")
-            print(f"  Total: {len(sorted_vehicles)} vehicles")
+            print(f"  Total: {len(sorted_vehicles)} vehicles in {time_description}")
             
         else:
-            print("ℹ️  No vehicles found today")
+            print(f"ℹ️  No vehicles found in {time_description}")
     else:
         print(f"❌ Search failed: {result}")
 
