@@ -13,17 +13,50 @@ import base64
 import xml.etree.ElementTree as ET
 from vehicle_recognition import VehicleRecognition
 
-def check_camera_time():
+def select_camera():
+    """Let user select which camera to use"""
+    
+    print("📹 Camera Selection")
+    print("=" * 20)
+    print("Available cameras:")
+    print("1. Camera 1 - 192.168.60.254")
+    print("2. Camera 2 - 192.168.60.253")
+    print("3. Custom IP address")
+    
+    while True:
+        choice = input("\nSelect camera (1-3): ").strip()
+        
+        if choice == "1":
+            HOST = "192.168.60.254"
+            break
+        elif choice == "2":
+            HOST = "192.168.60.253"
+            break
+        elif choice == "3":
+            HOST = input("Enter custom IP address: ").strip()
+            if HOST:
+                break
+            else:
+                print("Invalid IP address. Please try again.")
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+    
+    # Get other configuration
+    PORT = input("Enter port (default 80): ").strip() or "80"
+    USERNAME = input("Enter username (default admin): ").strip() or "admin"
+    PASSWORD = input("Enter password (default admin): ").strip() or "admin"
+    
+    print(f"\n📹 Selected camera: {HOST}:{PORT}")
+    print(f"👤 Username: {USERNAME}")
+    print("=" * 50)
+    
+    return HOST, int(PORT), USERNAME, PASSWORD
+
+def check_camera_time(HOST, PORT, USERNAME, PASSWORD):
     """Check the camera's current time"""
     
     print("🕐 Camera Time Debug")
     print("=" * 30)
-    
-    # Camera settings
-    HOST = "192.168.60.254"
-    PORT = 80
-    USERNAME = "admin"
-    PASSWORD = "admin"
     
     # Build URL for getting camera time
     url_time = f"http://{HOST}:{PORT}/GetDateAndTime"
@@ -85,17 +118,11 @@ def check_camera_time():
     except Exception as e:
         print(f"❌ Error getting camera time: {e}")
 
-def search_with_different_times():
+def search_with_different_times(HOST, PORT, USERNAME, PASSWORD):
     """Search vehicles with different time ranges to find the right one"""
     
     print("\n🔍 Testing Different Time Ranges")
     print("=" * 40)
-    
-    # Camera settings
-    HOST = "192.168.60.254"
-    PORT = 80
-    USERNAME = "admin"
-    PASSWORD = "admin"
     
     try:
         vehicle_system = VehicleRecognition(HOST, PORT, USERNAME, PASSWORD)
@@ -140,17 +167,11 @@ def search_with_different_times():
         else:
             print(f"   ❌ Search failed: {result}")
 
-def search_all_vehicles():
+def search_all_vehicles(HOST, PORT, USERNAME, PASSWORD):
     """Search for ALL vehicles without time filter"""
     
     print("\n🔍 Searching ALL Vehicles (No Time Filter)")
     print("=" * 45)
-    
-    # Camera settings
-    HOST = "192.168.60.254"
-    PORT = 80
-    USERNAME = "admin"
-    PASSWORD = "admin"
     
     try:
         vehicle_system = VehicleRecognition(HOST, PORT, USERNAME, PASSWORD)
@@ -198,7 +219,10 @@ def main():
     print("🔧 Vehicle Time Debug Tool")
     print("=" * 30)
     
-    print("Choose an option:")
+    # Let user select camera first
+    HOST, PORT, USERNAME, PASSWORD = select_camera()
+    
+    print("\nChoose an option:")
     print("1. Check camera time vs system time")
     print("2. Test different time ranges")
     print("3. Search all vehicles (no time filter)")
@@ -207,20 +231,20 @@ def main():
     choice = input("\nEnter your choice (1-4): ").strip()
     
     if choice == "1":
-        check_camera_time()
+        check_camera_time(HOST, PORT, USERNAME, PASSWORD)
     elif choice == "2":
-        search_with_different_times()
+        search_with_different_times(HOST, PORT, USERNAME, PASSWORD)
     elif choice == "3":
-        search_all_vehicles()
+        search_all_vehicles(HOST, PORT, USERNAME, PASSWORD)
     elif choice == "4":
-        check_camera_time()
-        search_with_different_times()
-        search_all_vehicles()
+        check_camera_time(HOST, PORT, USERNAME, PASSWORD)
+        search_with_different_times(HOST, PORT, USERNAME, PASSWORD)
+        search_all_vehicles(HOST, PORT, USERNAME, PASSWORD)
     else:
         print("Running all tests...")
-        check_camera_time()
-        search_with_different_times()
-        search_all_vehicles()
+        check_camera_time(HOST, PORT, USERNAME, PASSWORD)
+        search_with_different_times(HOST, PORT, USERNAME, PASSWORD)
+        search_all_vehicles(HOST, PORT, USERNAME, PASSWORD)
 
 if __name__ == "__main__":
     main() 

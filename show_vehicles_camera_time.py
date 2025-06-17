@@ -13,14 +13,8 @@ import base64
 import xml.etree.ElementTree as ET
 from vehicle_recognition import VehicleRecognition
 
-def get_camera_time():
+def get_camera_time(HOST, PORT, USERNAME, PASSWORD):
     """Get the current time from the camera"""
-    
-    # Camera settings
-    HOST = "192.168.60.254"
-    PORT = 80
-    USERNAME = "admin"
-    PASSWORD = "admin"
     
     # Build URL for getting camera time
     url_time = f"http://{HOST}:{PORT}/GetDateAndTime"
@@ -60,23 +54,59 @@ def get_camera_time():
     # Fallback to system time if camera time fails
     return datetime.datetime.now()
 
+def select_camera():
+    """Let user select which camera to use"""
+    
+    print("📹 Camera Selection")
+    print("=" * 20)
+    print("Available cameras:")
+    print("1. Camera 1 - 192.168.60.254")
+    print("2. Camera 2 - 192.168.60.253")
+    print("3. Custom IP address")
+    
+    while True:
+        choice = input("\nSelect camera (1-3): ").strip()
+        
+        if choice == "1":
+            HOST = "192.168.60.254"
+            break
+        elif choice == "2":
+            HOST = "192.168.60.253"
+            break
+        elif choice == "3":
+            HOST = input("Enter custom IP address: ").strip()
+            if HOST:
+                break
+            else:
+                print("Invalid IP address. Please try again.")
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+    
+    # Get other configuration
+    PORT = input("Enter port (default 80): ").strip() or "80"
+    USERNAME = input("Enter username (default admin): ").strip() or "admin"
+    PASSWORD = input("Enter password (default admin): ").strip() or "admin"
+    
+    print(f"\n📹 Selected camera: {HOST}:{PORT}")
+    print(f"👤 Username: {USERNAME}")
+    print("=" * 50)
+    
+    return HOST, int(PORT), USERNAME, PASSWORD
+
 def show_vehicles_using_camera_time():
     """Show vehicles using camera time instead of system time"""
     
     print("🚗 Show Vehicles (Using Camera Time)")
     print("=" * 40)
     
-    # Camera settings
-    HOST = "192.168.60.254"
-    PORT = 80
-    USERNAME = "admin"
-    PASSWORD = "admin"
+    # Let user select camera
+    HOST, PORT, USERNAME, PASSWORD = select_camera()
     
     print(f"📹 Connecting to: {HOST}:{PORT}")
     
     # Get camera time
     print("\n🕐 Getting camera time...")
-    camera_now = get_camera_time()
+    camera_now = get_camera_time(HOST, PORT, USERNAME, PASSWORD)
     print(f"📅 Camera Time: {camera_now.strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Initialize the system
