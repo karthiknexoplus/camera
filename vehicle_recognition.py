@@ -61,13 +61,7 @@ class VehicleRecognition:
         """Search for vehicles within a time range"""
         try:
             # Build XML request
-            xml_body = f'''<?xml version="1.0" encoding="utf-8"?>
-<config><search>
-<starttime type="string"><![CDATA[{start_time}]]></starttime>
-<endtime type="string"><![CDATA[{end_time}]]></endtime>
-{'' if not vehicle_plate else f'<vehiclePlate type="string"><![CDATA[{vehicle_plate}]]></vehiclePlate>'}
-{'' if not list_type else f'<listType type="listType">{list_type}</listType>'}
-</search></config>'''
+            xml_body = f'''<?xml version="1.0" encoding="utf-8" ?><config><search>  <starttime type="string"><![CDATA[{start_time}]]></starttime>  <endtime type="string"><![CDATA[{end_time}]]></endtime>{'' if not vehicle_plate else f'  <vehiclePlate type="string"><![CDATA[{vehicle_plate}]]></vehiclePlate>  '}{'' if not list_type else f'<listType type="listType">{list_type}</listType>  '}</search></config><token type="string"><![CDATA[259A6EEC-E40D-814C-BD24-82316F24A34C]]></token><sessionId type="string"><![CDATA[07725EA6-6C94-AC46-9F1F-49B2F186305B]]></sessionId>'''
             
             response = requests.post(self.url_search_by_time, headers=self.headers, data=xml_body.encode('utf-8'))
             response.raise_for_status()
@@ -112,12 +106,7 @@ class VehicleRecognition:
     def get_vehicle_details(self, vehicle_id, snap_time, request_panoramic_pic=True):
         """Get detailed information for a specific vehicle"""
         try:
-            xml_body = f'''<?xml version="1.0" encoding="utf-8"?>
-<config><search>
-<snapTime type="uint64">{snap_time}</snapTime>
-<vehicleID type="uint32">{vehicle_id}</vehicleID>
-<requestPanoramicPic type="boolean">{str(request_panoramic_pic).lower()}</requestPanoramicPic>
-</search></config>'''
+            xml_body = f'''<?xml version="1.0" encoding="utf-8" ?><config><search>  <snapTime type="uint64">{snap_time}</snapTime>  <vehicleID type="uint32">{vehicle_id}</vehicleID>  <requestPanoramicPic type="boolean">{str(request_panoramic_pic).lower()}</requestPanoramicPic></search></config><token type="string"><![CDATA[259A6EEC-E40D-814C-BD24-82316F24A34C]]></token><sessionId type="string"><![CDATA[07725EA6-6C94-AC46-9F1F-49B2F186305B]]></sessionId>'''
             
             response = requests.post(self.url_search_by_key, headers=self.headers, data=xml_body.encode('utf-8'))
             response.raise_for_status()

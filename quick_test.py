@@ -68,11 +68,7 @@ def quick_test():
     }
     
     # Build XML request
-    xml_body = f'''<?xml version="1.0" encoding="utf-8"?>
-<config><search>
-<starttime type="string"><![CDATA[{start_time}]]></starttime>
-<endtime type="string"><![CDATA[{end_time}]]></endtime>
-</search></config>'''
+    xml_body = f'''<?xml version="1.0" encoding="utf-8" ?><config><search>  <starttime type="string"><![CDATA[{start_time}]]></starttime>  <endtime type="string"><![CDATA[{end_time}]]></endtime></search></config><token type="string"><![CDATA[259A6EEC-E40D-814C-BD24-82316F24A34C]]></token><sessionId type="string"><![CDATA[07725EA6-6C94-AC46-9F1F-49B2F186305B]]></sessionId>'''
     
     url = f"http://{HOST}:{PORT}/SearchSnapVehicleByTime"
     
