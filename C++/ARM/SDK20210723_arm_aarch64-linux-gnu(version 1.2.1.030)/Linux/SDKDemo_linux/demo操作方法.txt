@@ -1,0 +1,9 @@
+./sdkdemo
+先选择1   会生成一个rgn_dev.bin文件，每次运行的时候自己先手动删除这个文件
+再选择2  ==》0 abc 或者 0 rgn1之类的 然后得到一个regionID，假设regionID = 1
+再选择3  ==》1（上一步的regionID） abc (上一步的rgn/rgn1) 192.168.3.129 9008 admin 123456 1 然后会生成一个deviceID
+
+再然后就自己看着来了
+
+
+1 abc 192.168.51.212 9008 admin 123456 1

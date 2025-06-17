@@ -1,0 +1,2 @@
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\DevSdkByCS.dll
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\DevSdkByCS\obj\x86\Release\DevSdkByCS.dll

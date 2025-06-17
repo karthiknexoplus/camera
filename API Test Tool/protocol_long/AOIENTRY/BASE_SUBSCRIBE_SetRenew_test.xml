@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="1.7" xmlns="http://www.ipc.com/ver10">
+<serverAddress type="string"><![CDATA[http://10.20.18.23:8080/Sample/event/subsription_0]]></serverAddress>
+<renewTime type="uint32">60</renewTime>
+</config>

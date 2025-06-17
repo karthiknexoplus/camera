@@ -1,0 +1,22 @@
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\Demo.exe.config
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\Demo.exe
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\Demo.pdb
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.csprojResolveAssemblyReference.cache
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.AboutBox1.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.BackUp_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.ChangePsw.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.Cruise.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.DiscoverDevices.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.EditAlarmTirgger.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.ConnectType_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.Live_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.Login_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.Msg_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.PlayBack_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.Properties.Resources.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.csproj.GenerateResource.Cache
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.exe
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Debug\Demo.pdb
+E:\DevForAdmit\NetSdk\Windows\bin_release\Debug_vcx\Demo.exe.config
+E:\DevForAdmit\NetSdk\Windows\bin_release\Debug_vcx\Demo.exe
+E:\DevForAdmit\NetSdk\Windows\bin_release\Debug_vcx\Demo.pdb

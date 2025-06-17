@@ -1,0 +1,19 @@
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\Demo.exe.config
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\Demo.exe
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx\Demo.pdb
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.csprojResolveAssemblyReference.cache
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.AboutBox1.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.BackUp_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.ChangePsw.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.Cruise.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.DiscoverDevices.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.EditAlarmTirgger.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.ConnectType_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.Live_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.Login_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.Msg_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.PlayBack_Dialog.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.Properties.Resources.resources
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.csproj.GenerateResource.Cache
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.exe
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\Demo\obj\x86\Release\Demo.pdb

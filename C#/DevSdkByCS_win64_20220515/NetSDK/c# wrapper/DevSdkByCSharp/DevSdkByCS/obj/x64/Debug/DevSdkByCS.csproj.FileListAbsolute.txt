@@ -1,0 +1,6 @@
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx_x64\DevSdkByCS.dll
+E:\DevForAdmit\NetSdk\Windows\bin_release\Release_vcx_x64\DevSdkByCS.pdb
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\DevSdkByCS\obj\x64\Debug\DevSdkByCS.dll
+E:\DevForAdmit\NetSdk\Windows\c# wrapper\DevSdkByCSharp\DevSdkByCS\obj\x64\Debug\DevSdkByCS.pdb
+E:\DevForAdmit\NetSdk\Windows\bin_release\Debug_vcx_x64\DevSdkByCS.dll
+E:\DevForAdmit\NetSdk\Windows\bin_release\Debug_vcx_x64\DevSdkByCS.pdb
