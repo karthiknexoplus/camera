@@ -121,6 +121,71 @@ def quick_test():
     except Exception as e:
         print(f"❌ Direct request failed: {e}")
     
+    # Test 2.5: Test specific vehicle ID 298
+    print("\n🔍 Test 2.5: Testing Specific Vehicle ID 298...")
+    
+    # Use the exact payload provided by the user
+    specific_xml_body = '''<?xml version="1.0" encoding="utf-8" ?><config><search>  <snapTime type="uint64">1750156169843370</snapTime>  <vehicleID type="uint32">298</vehicleID>  <requestPanoramicPic type="boolean">true</requestPanoramicPic></search></config><token type="string"><![CDATA[EA082FB0-1B2F-7B46-ACD0-6477CACBE2C2]]></token><sessionId type="string"><![CDATA[BC67AF63-848E-1243-9396-E36A85F93F78]]></sessionId>'''
+    
+    specific_url = f"http://{HOST}:{PORT}/SearchSnapVehicleByKey"
+    
+    try:
+        print(f"📤 Request URL: {specific_url}")
+        print("📤 Request Body:")
+        print(specific_xml_body)
+        
+        specific_response = requests.post(specific_url, headers=headers, data=specific_xml_body.encode('utf-8'), timeout=30)
+        
+        print(f"\n📥 Response Status Code: {specific_response.status_code}")
+        print("📥 Response Headers:")
+        for key, value in specific_response.headers.items():
+            print(f"  {key}: {value}")
+        
+        print("\n📥 RAW XML Response for Vehicle ID 298:")
+        print("=" * 50)
+        specific_response_text = specific_response.content.decode('utf-8', errors='replace')
+        print(specific_response_text)
+        print("=" * 50)
+        
+        # Try to parse the response
+        if specific_response.status_code == 200:
+            try:
+                root = ET.fromstring(specific_response.content)
+                ns = {'ipc': root.tag.split('}')[0].strip('{')} if '}' in root.tag else {}
+                
+                # Check for errors
+                status = root.get('status')
+                if status == 'failed':
+                    error_code = root.get('errorCode', 'unknown')
+                    print(f"\n❌ Request failed with error code: {error_code}")
+                else:
+                    print(f"\n✅ Request successful!")
+                    
+                    # Try to parse vehicle details
+                    snap_vehicle = root.find('.//ipc:snapVehicle', ns) if ns else root.find('.//snapVehicle')
+                    if snap_vehicle is not None:
+                        snap_info = snap_vehicle.find('.//ipc:snapInfo', ns) if ns else snap_vehicle.find('.//snapInfo')
+                        if snap_info is not None:
+                            print("\n📋 Vehicle Details Found:")
+                            for child in snap_info:
+                                tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                                if tag == 'pictureData':
+                                    print(f"  {tag}: Available (base64 encoded, {len(child.text)} characters)")
+                                else:
+                                    print(f"  {tag}: {child.text}")
+                        else:
+                            print("❌ No snap info found in response")
+                    else:
+                        print("❌ No vehicle data found in response")
+                        
+            except ET.ParseError as e:
+                print(f"❌ Failed to parse XML response: {e}")
+        else:
+            print(f"❌ HTTP request failed with status code: {specific_response.status_code}")
+            
+    except Exception as e:
+        print(f"❌ Specific vehicle request failed: {e}")
+    
     # Test 3: Search Yesterday
     print("\n🔍 Test 3: Searching Yesterday's Vehicles...")
     yesterday = today - datetime.timedelta(days=1)
