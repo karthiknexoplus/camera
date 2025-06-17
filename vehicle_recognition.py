@@ -89,14 +89,18 @@ class VehicleRecognition:
                 
                 items = vehicle_list.findall('ipc:item', ns) if ns else vehicle_list.findall('item')
                 for item in items:
-                    vehicle_id = item.find('.//ipc:vehicleID', ns) if ns else item.find('.//vehicleID')
-                    snap_time = item.find('.//ipc:snapTime', ns) if ns else item.find('.//snapTime')
+                    vehicle_data = {}
                     
-                    if vehicle_id is not None and snap_time is not None:
-                        vehicles.append({
-                            'vehicleID': vehicle_id.text,
-                            'snapTime': snap_time.text
-                        })
+                    # Extract all available fields from the XML response
+                    fields = ['vehicleID', 'snapTime', 'vehiclePlate', 'listType', 'color', 'time']
+                    for field in fields:
+                        elem = item.find(f'.//ipc:{field}', ns) if ns else item.find(f'.//{field}')
+                        if elem is not None:
+                            vehicle_data[field] = elem.text
+                    
+                    # Only add if we have at least vehicleID and snapTime
+                    if vehicle_data.get('vehicleID') and vehicle_data.get('snapTime'):
+                        vehicles.append(vehicle_data)
                 
                 return True, {'count': count, 'vehicles': vehicles}
             else:
