@@ -53,9 +53,14 @@ def quick_test():
         print(f"✅ Found {data['count']} vehicles today")
         
         if data['count'] > 0:
-            print("📋 Sample vehicles:")
-            for i, vehicle in enumerate(data['vehicles'][:3], 1):
+            # Show all vehicles if 10 or fewer, otherwise show first 10
+            max_display = min(data['count'], 10)
+            print(f"📋 Showing {max_display} vehicles:")
+            for i, vehicle in enumerate(data['vehicles'][:max_display], 1):
                 print(f"  {i}. ID: {vehicle['vehicleID']}, Time: {vehicle['snapTime']}")
+            
+            if data['count'] > max_display:
+                print(f"  ... and {data['count'] - max_display} more vehicles")
         else:
             print("ℹ️  No vehicles found today")
     else:
