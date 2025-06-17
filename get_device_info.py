@@ -5,11 +5,45 @@ import os
 import datetime
 import time
 
-# Configuration (replace with your actual device info)
-HOST = "192.168.60.252"  # Device IP
-PORT = 80
-USERNAME = "admin"
-PASSWORD = "admin"
+# Configuration - User will input IP address
+def get_device_config():
+    print("=== IP Camera Device Information Tool ===")
+    print("\nAvailable cameras:")
+    print("1. Camera 1 - 192.168.60.252")
+    print("2. Camera 2 - 192.168.60.253")
+    print("3. Custom IP address")
+    
+    while True:
+        choice = input("\nSelect camera (1-3): ").strip()
+        
+        if choice == "1":
+            host = "192.168.60.252"
+            break
+        elif choice == "2":
+            host = "192.168.60.253"
+            break
+        elif choice == "3":
+            host = input("Enter custom IP address: ").strip()
+            if host:
+                break
+            else:
+                print("Invalid IP address. Please try again.")
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+    
+    # Get other configuration
+    port = input("Enter port (default 80): ").strip() or "80"
+    username = input("Enter username (default admin): ").strip() or "admin"
+    password = input("Enter password (default admin): ").strip() or "admin"
+    
+    print(f"\nConnecting to: {host}:{port}")
+    print(f"Username: {username}")
+    print("=" * 50)
+    
+    return host, int(port), username, password
+
+# Get device configuration from user
+HOST, PORT, USERNAME, PASSWORD = get_device_config()
 
 # Build URLs
 url_device = f"http://{HOST}:{PORT}/GetDeviceInfo"
@@ -2195,7 +2229,11 @@ def add_vehicle_plate():
             print(f"Response content: {e.response.text}")
 
 def display_menu():
-    print("\n=== IP Media Device Information Tool ===")
+    print(f"\n=== IP Camera Device Information Tool ===")
+    print(f"Connected to: {HOST}:{PORT}")
+    print(f"Username: {USERNAME}")
+    print("=" * 50)
+    
     print("\nBasic Device Information:")
     print("1. Get Basic Device Info")
     print("2. Get Detailed Device Info")
@@ -2234,16 +2272,17 @@ def display_menu():
     
     print("\nOther:")
     print("27. Get All Information")
+    print("28. Change Camera/Connection")
     print("0. Exit")
-    print("=======================================")
+    print("=" * 50)
 
 def get_user_choice():
     while True:
         try:
-            choice = int(input("\nEnter your choice (0-27): "))
-            if 0 <= choice <= 27:
+            choice = int(input("\nEnter your choice (0-28): "))
+            if 0 <= choice <= 28:
                 return choice
-            print("Invalid choice. Please enter a number between 0 and 27.")
+            print("Invalid choice. Please enter a number between 0 and 28.")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
@@ -2274,6 +2313,44 @@ def get_all_info():
     print_cpc_config()
     print_subscription_config()
     print("\n=== All Information Retrieved ===")
+
+def change_camera_connection():
+    global HOST, PORT, USERNAME, PASSWORD
+    global url_device, url_disk, url_detail, url_time, url_stream, url_image
+    global url_privacy_mask, url_ptz_caps, url_ptz_control, url_motion, url_alarm_trigger
+    global url_net_basic, url_reboot, url_vfd, url_perimeter, url_vehicle
+    global url_vehicle_plate, url_cdd, url_cpc, url_subscription
+    global url_vehicle_plate_progress, url_add_vehicle_plate
+    
+    print("\n=== Change Camera Connection ===")
+    HOST, PORT, USERNAME, PASSWORD = get_device_config()
+    
+    # Rebuild URLs with new connection
+    url_device = f"http://{HOST}:{PORT}/GetDeviceInfo"
+    url_disk = f"http://{HOST}:{PORT}/GetDiskInfo"
+    url_detail = f"http://{HOST}:{PORT}/GetDeviceDetail"
+    url_time = f"http://{HOST}:{PORT}/GetDateAndTime"
+    url_stream = f"http://{HOST}:{PORT}/GetStreamCaps"
+    url_image = f"http://{HOST}:{PORT}/GetImageConfig"
+    url_privacy_mask = f"http://{HOST}:{PORT}/GetPrivacyMaskConfig"
+    url_ptz_caps = f"http://{HOST}:{PORT}/PtzGetCaps"
+    url_ptz_control = f"http://{HOST}:{PORT}/PtzControl"
+    url_motion = f"http://{HOST}:{PORT}/GetMotionConfig"
+    url_alarm_trigger = f"http://{HOST}:{PORT}/GetAlarmTriggerConfig"
+    url_net_basic = f"http://{HOST}:{PORT}/GetNetBasicConfig"
+    url_reboot = f"http://{HOST}:{PORT}/Reboot"
+    url_vfd = f"http://{HOST}:{PORT}/GetSmartVfdConfig"
+    url_perimeter = f"http://{HOST}:{PORT}/GetSmartPerimeterConfig"
+    url_vehicle = f"http://{HOST}:{PORT}/GetSmartVehicleConfig"
+    url_vehicle_plate = f"http://{HOST}:{PORT}/GetVehiclePlate"
+    url_cdd = f"http://{HOST}:{PORT}/GetSmartCddConfig"
+    url_cpc = f"http://{HOST}:{PORT}/GetSmartCpcConfig"
+    url_subscription = f"http://{HOST}:{PORT}/GetSubscriptionConfig"
+    url_vehicle_plate_progress = f"http://{HOST}:{PORT}/GetVehiclePlateProgress"
+    url_add_vehicle_plate = f"http://{HOST}:{PORT}/AddVehiclePlate"
+    
+    print(f"\nSuccessfully changed connection to: {HOST}:{PORT}")
+    print("=" * 50)
 
 def main():
     while True:
@@ -2337,6 +2414,10 @@ def main():
             print_reboot()
         elif choice == 27:
             get_all_info()
+        elif choice == 28:
+            change_camera_connection()
+        else:
+            print("Invalid choice. Please enter a number between 0 and 28.")
         
         input("\nPress Enter to continue...")
 

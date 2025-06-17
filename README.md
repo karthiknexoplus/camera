@@ -57,13 +57,16 @@ cd ip-camera-device-info-tool
 pip install requests
 ```
 
-3. Configure your device settings in `get_device_info.py`:
-```python
-HOST = "192.168.88.201"  # Your device IP
-PORT = 80                # Your device port
-USERNAME = "admin"       # Your username
-PASSWORD = "admin"       # Your password
+3. Run the script and follow the prompts to configure your device:
+```bash
+python get_device_info.py
 ```
+
+The tool will prompt you to:
+- Select from predefined cameras (192.168.60.252, 192.168.60.253) or enter a custom IP
+- Enter port number (default: 80)
+- Enter username (default: admin)
+- Enter password (default: admin)
 
 ## Usage
 
@@ -101,6 +104,7 @@ The tool provides an interactive menu with the following options:
 25. **Get Subscription Config** - Event subscription settings
 26. **Reboot Device** - Restart the device
 27. **Get All Information** - Retrieve all available information
+28. **Change Camera/Connection** - Switch to a different camera
 
 ## Configuration
 
