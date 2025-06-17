@@ -6,7 +6,7 @@ import datetime
 import time
 
 # Configuration (replace with your actual device info)
-HOST = "192.168.88.201"  # Device IP
+HOST = "192.168.60.252"  # Device IP
 PORT = 80
 USERNAME = "admin"
 PASSWORD = "admin"
