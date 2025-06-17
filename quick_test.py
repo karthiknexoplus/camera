@@ -8,6 +8,9 @@ with your IP cameras.
 """
 
 import datetime
+import requests
+import base64
+import xml.etree.ElementTree as ET
 from vehicle_recognition import VehicleRecognition
 
 def quick_test():
@@ -41,30 +44,86 @@ def quick_test():
     else:
         print(f"❌ SD Card: {result}")
     
-    # Test 2: Search Today's Vehicles
+    # Test 2: Search Today's Vehicles with RAW XML output
     print("\n🔍 Test 2: Searching Today's Vehicles...")
     today = datetime.datetime.now()
     start_time = today.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
     end_time = today.replace(hour=23, minute=59, second=59).strftime("%Y-%m-%d %H:%M:%S")
     
-    success, result = vehicle_system.search_vehicles_by_time(start_time, end_time)
-    if success:
-        data = result
-        print(f"✅ Found {data['count']} vehicles today")
+    print(f"Searching from {start_time} to {end_time}")
+    
+    # Make direct request to see raw XML response
+    print("\n📤 Making direct request to see raw XML response...")
+    
+    # Prepare headers
+    auth_str = f"{USERNAME}:{PASSWORD}"
+    auth_bytes = auth_str.encode('ascii')
+    base64_auth = base64.b64encode(auth_bytes).decode('ascii')
+    headers = {
+        'Connection': 'Keep-Alive',
+        'Content-Type': 'application/xml; charset=UTF-8',
+        'Accept': 'application/xml; charset=UTF-8',
+        'Authorization': f'Basic {base64_auth}',
+        'User-Agent': 'Mozilla/5.0'
+    }
+    
+    # Build XML request
+    xml_body = f'''<?xml version="1.0" encoding="utf-8"?>
+<config><search>
+<starttime type="string"><![CDATA[{start_time}]]></starttime>
+<endtime type="string"><![CDATA[{end_time}]]></endtime>
+</search></config>'''
+    
+    url = f"http://{HOST}:{PORT}/SearchSnapVehicleByTime"
+    
+    try:
+        print(f"📤 Request URL: {url}")
+        print("📤 Request Headers:")
+        for key, value in headers.items():
+            if key != 'Authorization':
+                print(f"  {key}: {value}")
+            else:
+                print(f"  {key}: Basic [HIDDEN]")
         
-        if data['count'] > 0:
-            print("📋 Sample vehicles:")
-            for i, vehicle in enumerate(data['vehicles'][:3], 1):
-                print(f"  {i}. ID: {vehicle.get('vehicleID', 'N/A')}")
-                print(f"     Plate: {vehicle.get('vehiclePlate', 'N/A')}")
-                print(f"     Time: {vehicle.get('snapTime', 'N/A')}")
-                print(f"     Color: {vehicle.get('color', 'N/A')}")
-                print(f"     List Type: {vehicle.get('listType', 'N/A')}")
-                print()
+        print("📤 Request Body:")
+        print(xml_body)
+        
+        response = requests.post(url, headers=headers, data=xml_body.encode('utf-8'), timeout=30)
+        
+        print(f"\n📥 Response Status Code: {response.status_code}")
+        print("📥 Response Headers:")
+        for key, value in response.headers.items():
+            print(f"  {key}: {value}")
+        
+        print("\n📥 RAW XML Response:")
+        print("=" * 50)
+        response_text = response.content.decode('utf-8', errors='replace')
+        print(response_text)
+        print("=" * 50)
+        
+        # Now parse with our vehicle recognition system
+        print("\n🔍 Parsing with Vehicle Recognition System...")
+        success, result = vehicle_system.search_vehicles_by_time(start_time, end_time)
+        if success:
+            data = result
+            print(f"✅ Found {data['count']} vehicles today")
+            
+            if data['count'] > 0:
+                print("📋 Sample vehicles:")
+                for i, vehicle in enumerate(data['vehicles'][:3], 1):
+                    print(f"  {i}. ID: {vehicle.get('vehicleID', 'N/A')}")
+                    print(f"     Plate: {vehicle.get('vehiclePlate', 'N/A')}")
+                    print(f"     Time: {vehicle.get('snapTime', 'N/A')}")
+                    print(f"     Color: {vehicle.get('color', 'N/A')}")
+                    print(f"     List Type: {vehicle.get('listType', 'N/A')}")
+                    print()
+            else:
+                print("ℹ️  No vehicles found today")
         else:
-            print("ℹ️  No vehicles found today")
-    else:
-        print(f"❌ Search failed: {result}")
+            print(f"❌ Search failed: {result}")
+            
+    except Exception as e:
+        print(f"❌ Direct request failed: {e}")
     
     # Test 3: Search Yesterday
     print("\n🔍 Test 3: Searching Yesterday's Vehicles...")
