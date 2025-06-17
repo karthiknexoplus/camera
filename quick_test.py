@@ -68,7 +68,7 @@ def quick_test():
     }
     
     # Build XML request
-    xml_body = f'''<?xml version="1.0" encoding="utf-8" ?><config><search>  <starttime type="string"><![CDATA[{start_time}]]></starttime>  <endtime type="string"><![CDATA[{end_time}]]></endtime></search></config><token type="string"><![CDATA[259A6EEC-E40D-814C-BD24-82316F24A34C]]></token><sessionId type="string"><![CDATA[07725EA6-6C94-AC46-9F1F-49B2F186305B]]></sessionId>'''
+    xml_body = '''<?xml version="1.0" encoding="utf-8" ?><config><search>  <starttime type="string"><![CDATA[2025-06-17 00:00:00]]></starttime>  <endtime type="string"><![CDATA[2025-06-18 00:00:00]]></endtime></search></config><token type="string"><![CDATA[EA082FB0-1B2F-7B46-ACD0-6477CACBE2C2]]></token><sessionId type="string"><![CDATA[BC67AF63-848E-1243-9396-E36A85F93F78]]></sessionId>'''
     
     url = f"http://{HOST}:{PORT}/SearchSnapVehicleByTime"
     
@@ -96,6 +96,89 @@ def quick_test():
         response_text = response.content.decode('utf-8', errors='replace')
         print(response_text)
         print("=" * 50)
+        
+        # Parse and display response in meaningful way
+        print("\n🔍 PARSED RESPONSE (Meaningful Format):")
+        print("=" * 50)
+        
+        if response.status_code == 200:
+            try:
+                root = ET.fromstring(response.content)
+                ns = {'ipc': root.tag.split('}')[0].strip('{')} if '}' in root.tag else {}
+                
+                # Check for errors
+                status = root.get('status')
+                if status == 'failed':
+                    error_code = root.get('errorCode', 'unknown')
+                    print(f"❌ Request failed with error code: {error_code}")
+                else:
+                    print(f"✅ Request successful!")
+                    
+                    # Parse vehicle list
+                    vehicle_list = root.find('.//ipc:captureVehicleList', ns) if ns else root.find('.//captureVehicleList')
+                    if vehicle_list is not None:
+                        count = int(vehicle_list.get('count', '0'))
+                        print(f"\n📊 Found {count} vehicles in the time range")
+                        print(f"📅 Time Range: 2025-06-17 00:00:00 to 2025-06-18 00:00:00")
+                        
+                        if count > 0:
+                            print("\n🚗 VEHICLE DETAILS:")
+                            print("-" * 50)
+                            
+                            items = vehicle_list.findall('ipc:item', ns) if ns else vehicle_list.findall('item')
+                            for i, item in enumerate(items, 1):
+                                print(f"\n📋 Vehicle #{i}:")
+                                
+                                # Extract all available fields
+                                fields = ['vehicleID', 'snapTime', 'vehiclePlate', 'listType', 'color', 'time']
+                                vehicle_data = {}
+                                
+                                for field in fields:
+                                    elem = item.find(f'.//ipc:{field}', ns) if ns else item.find(f'.//{field}')
+                                    if elem is not None:
+                                        vehicle_data[field] = elem.text
+                                
+                                # Display in meaningful format
+                                if 'vehicleID' in vehicle_data:
+                                    print(f"  🆔 Vehicle ID: {vehicle_data['vehicleID']}")
+                                
+                                if 'vehiclePlate' in vehicle_data:
+                                    print(f"  🚙 License Plate: {vehicle_data['vehiclePlate']}")
+                                else:
+                                    print(f"  🚙 License Plate: Not available")
+                                
+                                if 'time' in vehicle_data:
+                                    print(f"  🕐 Time: {vehicle_data['time']}")
+                                elif 'snapTime' in vehicle_data:
+                                    print(f"  🕐 Snap Time: {vehicle_data['snapTime']}")
+                                
+                                if 'color' in vehicle_data:
+                                    print(f"  🎨 Color: {vehicle_data['color']}")
+                                
+                                if 'listType' in vehicle_data:
+                                    list_type = vehicle_data['listType']
+                                    list_type_desc = {
+                                        "outOfList": "Stranger Vehicle",
+                                        "temporaryList": "Temporary Vehicle", 
+                                        "blackList": "Blacklist Vehicle",
+                                        "whiteList": "Whitelist Vehicle"
+                                    }.get(list_type, list_type)
+                                    print(f"  📋 Type: {list_type_desc}")
+                                
+                                print("  " + "-" * 30)
+                        else:
+                            print("ℹ️  No vehicles found in this time range")
+                    else:
+                        print("❌ No vehicle list found in response")
+                        
+            except ET.ParseError as e:
+                print(f"❌ Failed to parse XML response: {e}")
+                print("Raw response was:")
+                print(response_text)
+        else:
+            print(f"❌ HTTP request failed with status code: {response.status_code}")
+            print("Raw response was:")
+            print(response_text)
         
         # Now parse with our vehicle recognition system
         print("\n🔍 Parsing with Vehicle Recognition System...")
