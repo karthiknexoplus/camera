@@ -9,7 +9,7 @@ import time
 def get_device_config():
     print("=== IP Camera Device Information Tool ===")
     print("\nAvailable cameras:")
-    print("1. Camera 1 - 192.168.60.252")
+    print("1. Camera 1 - 192.168.60.254")
     print("2. Camera 2 - 192.168.60.253")
     print("3. Custom IP address")
     
@@ -17,7 +17,7 @@ def get_device_config():
         choice = input("\nSelect camera (1-3): ").strip()
         
         if choice == "1":
-            host = "192.168.60.252"
+            host = "192.168.60.254"
             break
         elif choice == "2":
             host = "192.168.60.253"

@@ -63,7 +63,7 @@ python get_device_info.py
 ```
 
 The tool will prompt you to:
-- Select from predefined cameras (192.168.60.252, 192.168.60.253) or enter a custom IP
+- Select from predefined cameras (192.168.60.254, 192.168.60.253) or enter a custom IP
 - Enter port number (default: 80)
 - Enter username (default: admin)
 - Enter password (default: admin)
