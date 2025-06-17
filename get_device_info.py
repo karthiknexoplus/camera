@@ -5,6 +5,13 @@ import os
 import datetime
 import time
 
+# Import vehicle recognition module
+try:
+    from vehicle_recognition import vehicle_search_interface
+    VEHICLE_RECOGNITION_AVAILABLE = True
+except ImportError:
+    VEHICLE_RECOGNITION_AVAILABLE = False
+
 # Configuration - User will input IP address
 def get_device_config():
     print("=== IP Camera Device Information Tool ===")
@@ -2273,16 +2280,19 @@ def display_menu():
     print("\nOther:")
     print("27. Get All Information")
     print("28. Change Camera/Connection")
+    if VEHICLE_RECOGNITION_AVAILABLE:
+        print("29. Vehicle Recognition System")
     print("0. Exit")
     print("=" * 50)
 
 def get_user_choice():
     while True:
         try:
-            choice = int(input("\nEnter your choice (0-28): "))
-            if 0 <= choice <= 28:
+            max_choice = 29 if VEHICLE_RECOGNITION_AVAILABLE else 28
+            choice = int(input(f"\nEnter your choice (0-{max_choice}): "))
+            if 0 <= choice <= max_choice:
                 return choice
-            print("Invalid choice. Please enter a number between 0 and 28.")
+            print(f"Invalid choice. Please enter a number between 0 and {max_choice}.")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
@@ -2416,8 +2426,27 @@ def main():
             get_all_info()
         elif choice == 28:
             change_camera_connection()
+        elif choice == 29:
+            if VEHICLE_RECOGNITION_AVAILABLE:
+                print("\n=== Vehicle Recognition System ===")
+                print("This feature provides advanced vehicle detection and license plate recognition capabilities.")
+                print("Features include:")
+                print("- Time-based vehicle search")
+                print("- Detailed vehicle information retrieval")
+                print("- Data export with images")
+                print("- Statistical analysis")
+                print("- SD card status monitoring")
+                
+                proceed = input("\nProceed to Vehicle Recognition System? (y/n): ").strip().lower()
+                if proceed == 'y':
+                    vehicle_search_interface(HOST, PORT, USERNAME, PASSWORD)
+                else:
+                    print("Returning to main menu...")
+            else:
+                print("Vehicle Recognition System is not available.")
         else:
-            print("Invalid choice. Please enter a number between 0 and 28.")
+            max_choice = 29 if VEHICLE_RECOGNITION_AVAILABLE else 28
+            print(f"Invalid choice. Please enter a number between 0 and {max_choice}.")
         
         input("\nPress Enter to continue...")
 

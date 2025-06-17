@@ -33,6 +33,14 @@ A comprehensive Python tool for retrieving and managing information from IP came
 - Crowd density detection (CDD)
 - Cross-line people counting (CPC)
 
+### Vehicle Recognition System
+- **Time-based vehicle search** - Search for vehicles within specific time ranges
+- **Detailed vehicle information** - Retrieve comprehensive vehicle data including license plates
+- **Data export with images** - Export vehicle data to CSV/ZIP format with captured images
+- **Statistical analysis** - Analyze vehicle detection patterns and distributions
+- **SD card status monitoring** - Check storage status before operations
+- **Advanced filtering** - Filter by license plate, list type, and time periods
+
 ### System Management
 - Subscription configuration
 - Device reboot functionality
@@ -105,6 +113,41 @@ The tool provides an interactive menu with the following options:
 26. **Reboot Device** - Restart the device
 27. **Get All Information** - Retrieve all available information
 28. **Change Camera/Connection** - Switch to a different camera
+29. **Vehicle Recognition System** - Advanced vehicle detection and analysis
+
+### Vehicle Recognition System Features
+
+The Vehicle Recognition System provides advanced capabilities for vehicle detection and license plate recognition:
+
+#### Search Vehicles by Time Range
+- Search for vehicles detected within specific time periods
+- Filter by license plate number
+- Filter by list type (stranger, temporary, blacklist, whitelist)
+- View detection results with timestamps
+
+#### Get Vehicle Details
+- Retrieve detailed information for specific vehicles
+- Access license plate data, vehicle color, and detection time
+- Option to include captured images (base64 encoded)
+- View list type classifications
+
+#### Export Vehicle Data
+- Export vehicle detection data to CSV format
+- Include captured images in ZIP archive
+- Customizable export parameters
+- Support for Chinese character encoding
+- Progress tracking during export
+
+#### Vehicle Statistics
+- Analyze vehicle detection patterns
+- View distribution by list type
+- Time-based analysis (hourly distribution)
+- Statistical summaries for reporting
+
+#### SD Card Status Monitoring
+- Check SD card status before operations
+- Monitor storage availability
+- Handle various SD card states (normal, formatting, error)
 
 ## Configuration
 
@@ -124,6 +167,9 @@ The tool connects to IP cameras using HTTP POST requests with XML payloads. Make
 - `GetAlarmTriggerConfig`
 - `GetNetBasicConfig`
 - `Reboot`
+- `SearchSnapVehicleByTime` (Vehicle Recognition)
+- `SearchSnapVehicleByKey` (Vehicle Recognition)
+- `GetSdCardStatus` (Vehicle Recognition)
 - And many more smart detection APIs
 
 ### Authentication
@@ -134,6 +180,7 @@ The tool uses Basic Authentication with base64-encoded credentials. Ensure your 
 ```
 ip-camera-device-info-tool/
 ├── get_device_info.py          # Main application script
+├── vehicle_recognition.py      # Vehicle recognition system module
 ├── test_device_control.py      # Test script for device control
 ├── setup.py                    # Package setup file
 ├── README.md                   # This file
@@ -176,6 +223,11 @@ The tool supports various API endpoints for different device functions:
 - `/GetSmartCddConfig` - Crowd density
 - `/GetSmartCpcConfig` - People counting
 
+### Vehicle Recognition
+- `/SearchSnapVehicleByTime` - Search vehicles by time range
+- `/SearchSnapVehicleByKey` - Get specific vehicle details
+- `/GetSdCardStatus` - Check SD card status
+
 ### System Management
 - `/GetNetBasicConfig` - Network settings
 - `/GetSubscriptionConfig` - Event subscriptions
@@ -189,6 +241,8 @@ The tool includes comprehensive error handling for:
 - Invalid API responses
 - Device timeout errors
 - XML parsing errors
+- SD card status issues
+- Vehicle data export errors
 
 ## Contributing
 
@@ -214,6 +268,14 @@ For issues and questions:
 3. Include device model, firmware version, and error messages
 
 ## Changelog
+
+### Version 1.1.0
+- Added Vehicle Recognition System
+- Time-based vehicle search functionality
+- Vehicle data export with images
+- Statistical analysis capabilities
+- SD card status monitoring
+- Enhanced error handling
 
 ### Version 1.0.0
 - Initial release
