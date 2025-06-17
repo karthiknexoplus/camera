@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-Show All Vehicles Script
-========================
+Show Recent Vehicles Script
+===========================
 
-A simple script to show all vehicles found in a search, sorted by time.
+A script to show vehicles sorted by time, with the most recent first.
 """
 
 import datetime
 from vehicle_recognition import VehicleRecognition
 
-def show_all_vehicles():
-    """Show all vehicles found in today's search, sorted by time"""
+def show_recent_vehicles():
+    """Show vehicles sorted by time, most recent first"""
     
-    print("🚗 Show All Vehicles (Sorted by Time)")
-    print("=" * 40)
+    print("🚗 Show Recent Vehicles (Sorted by Time)")
+    print("=" * 45)
     
     # Camera settings - modify these for your camera
     HOST = "192.168.60.254"  # Change to your camera IP
@@ -48,19 +48,20 @@ def show_all_vehicles():
                                    key=lambda x: int(x['snapTime']), 
                                    reverse=True)
             
-            print(f"\n📋 All {data['count']} vehicles (sorted by time, most recent first):")
+            print(f"\n📋 Vehicles sorted by time (most recent first):")
             print("-" * 60)
             
             for i, vehicle in enumerate(sorted_vehicles, 1):
                 snap_time = int(vehicle['snapTime'])
                 
                 # Convert timestamp to readable time
+                # The timestamp appears to be in microseconds, so divide by 1000000
                 timestamp_seconds = snap_time / 1000000
                 readable_time = datetime.datetime.fromtimestamp(timestamp_seconds)
                 
                 print(f"{i:2d}. Vehicle ID: {vehicle['vehicleID']}")
-                print(f"    Snap Time: {readable_time.strftime('%Y-%m-%d %H:%M:%S')}")
-                print(f"    Raw Timestamp: {snap_time}")
+                print(f"    Raw Snap Time: {snap_time}")
+                print(f"    Readable Time: {readable_time.strftime('%Y-%m-%d %H:%M:%S')}")
                 
                 # Get detailed info for each vehicle
                 success, details = vehicle_system.get_vehicle_details(
@@ -84,24 +85,57 @@ def show_all_vehicles():
                 
                 print("-" * 60)
             
-            # Show which is most recent
-            most_recent = sorted_vehicles[0]
-            oldest = sorted_vehicles[-1]
-            
-            print(f"\n🎯 Most Recent Vehicle:")
-            print(f"   Vehicle ID: {most_recent['vehicleID']}")
-            most_recent_time = datetime.datetime.fromtimestamp(int(most_recent['snapTime']) / 1000000)
-            print(f"   Time: {most_recent_time.strftime('%Y-%m-%d %H:%M:%S')}")
-            
+            # Show summary
             print(f"\n📊 Summary:")
-            print(f"   Most Recent: Vehicle ID {most_recent['vehicleID']}")
-            print(f"   Oldest: Vehicle ID {oldest['vehicleID']}")
-            print(f"   Total: {len(sorted_vehicles)} vehicles")
+            print(f"  Most Recent: Vehicle ID {sorted_vehicles[0]['vehicleID']}")
+            print(f"  Oldest: Vehicle ID {sorted_vehicles[-1]['vehicleID']}")
+            print(f"  Total: {len(sorted_vehicles)} vehicles")
             
         else:
             print("ℹ️  No vehicles found today")
     else:
         print(f"❌ Search failed: {result}")
 
+def analyze_timestamps():
+    """Analyze the timestamp format from your data"""
+    
+    print("\n🔍 Timestamp Analysis")
+    print("=" * 25)
+    
+    # Your example timestamps
+    timestamps = [
+        1750159401755621,  # Vehicle ID: 679
+        1750157447348973,  # Vehicle ID: 450  
+        1750156169843370   # Vehicle ID: 298
+    ]
+    
+    print("Your vehicle timestamps:")
+    for i, ts in enumerate(timestamps, 1):
+        # Try different conversions
+        seconds_1 = ts / 1000000  # Microseconds to seconds
+        seconds_2 = ts / 1000     # Milliseconds to seconds
+        
+        time_1 = datetime.datetime.fromtimestamp(seconds_1)
+        time_2 = datetime.datetime.fromtimestamp(seconds_2)
+        
+        print(f"\nVehicle {i}:")
+        print(f"  Raw timestamp: {ts}")
+        print(f"  As microseconds: {time_1}")
+        print(f"  As milliseconds: {time_2}")
+        print(f"  Difference: {time_1 - time_2}")
+
 if __name__ == "__main__":
-    show_all_vehicles() 
+    print("Choose an option:")
+    print("1. Show vehicles sorted by time")
+    print("2. Analyze timestamp format")
+    
+    choice = input("\nEnter your choice (1-2): ").strip()
+    
+    if choice == "1":
+        show_recent_vehicles()
+    elif choice == "2":
+        analyze_timestamps()
+    else:
+        print("Running both...")
+        show_recent_vehicles()
+        analyze_timestamps() 
